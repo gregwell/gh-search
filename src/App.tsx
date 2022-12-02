@@ -1,5 +1,6 @@
 import { Form, Formik, Field } from "formik";
 import { useState } from "react";
+
 import { getUsers } from "./api/getUsers";
 import { Button } from "./Button";
 import { Repos, User } from "./types";
@@ -9,11 +10,14 @@ const App = () => {
   const [users, setUsers] = useState([] as User[]);
   const [repos, setRepos] = useState({} as Repos);
   const [searchString, setSearchString] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSearch = async (values: any) => {
+    setIsLoading(true);
     setSearchString(values.q);
     // add tests and error handling
     const users = (await getUsers(values.q)) as any;
+    setIsLoading(false);
 
     setUsers(users.items);
   };
@@ -41,6 +45,7 @@ const App = () => {
             );
           }}
         </Formik>
+        {isLoading && <div className="py-2">Loading...</div>}
         {users && users.length > 0 && (
           <div className="py-2">{`Showing users for "${searchString}"`}</div>
         )}
