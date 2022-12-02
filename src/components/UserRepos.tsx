@@ -30,7 +30,7 @@ export const UserRepos = ({ user, repos, setRepos }: UserReposProps) => {
 
     setIsLoading(false);
 
-    if (fetchedRepos === undefined) {
+    if (!fetchedRepos) {
       setIsError(true);
       return;
     }

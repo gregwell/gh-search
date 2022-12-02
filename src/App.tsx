@@ -24,7 +24,7 @@ const App = () => {
 
     setIsLoading(false);
 
-    if (fetchedUsers === undefined) {
+    if (!fetchedUsers) {
       setIsError(true);
       setUsers([] as User[]);
       return;
