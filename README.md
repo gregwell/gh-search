@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# Github Search
+
+An app that allows you to search for up to 5 GitHub users and browser their repositories.
+
+---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

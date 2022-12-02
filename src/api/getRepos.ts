@@ -2,10 +2,6 @@ import axios from "axios";
 import { Repo } from "../types";
 import { apiConfig } from "./apiConfig";
 
-// @todo move auth token to env
-//split with getusers
-//maybe move away the config
-
 export const getRepos = async (
   userName: String
 ): Promise<Repo[] | undefined> => {
