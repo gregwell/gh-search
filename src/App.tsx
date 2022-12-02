@@ -5,65 +5,67 @@ import { getUsers } from "./api/getUsers";
 import { Button } from "./components/Button";
 import { UserFormValues, Repos, User } from "./types";
 import { UserRepos } from "./components/UserRepos";
+import { getShowingUsersText, texts } from "./texts";
+import { Text } from "./components/Text";
 
 const App = () => {
   const [users, setUsers] = useState([] as User[]);
   const [repos, setRepos] = useState({} as Repos);
   const [searchString, setSearchString] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [isError, setIsError] = useState(false);
 
   const handleSearch = async (values: UserFormValues) => {
-    setError("");
+    setIsError(false);
     setIsLoading(true);
 
-    setSearchString(values.q);
-    const users = await getUsers(values.q);
+    setSearchString(values.queryString);
+    const fetchedUsers = await getUsers(values.queryString);
 
     setIsLoading(false);
 
-    if (users === undefined) {
-      setError("General error occured. Try again later.");
+    if (fetchedUsers === undefined) {
+      setIsError(true);
       setUsers([] as User[]);
       return;
     }
-    setUsers(users);
+    setUsers(fetchedUsers);
   };
 
   return (
     <div className="flex justify-center">
       <div className="sm:mt-10 p-4 w-full max-w-[800px]">
-        <Formik initialValues={{ q: "" }} onSubmit={handleSearch}>
+        <Formik initialValues={{ queryString: "" }} onSubmit={handleSearch}>
           {({ isSubmitting, values, handleChange }) => {
             return (
               <Form className="flex flex-col gap-4">
                 <Field
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     handleChange(e);
-                    setError("");
+                    setIsError(false);
                   }}
-                  name="q"
-                  placeholder="Enter username"
+                  name="queryString"
+                  placeholder={texts.app.inputPlaceHolder}
                   className="w-full bg-slate-100 border border-slate-100 p-4"
                 />
                 <Button
                   disabled={
                     (isSubmitting ||
-                      values.q === searchString ||
-                      values.q === "") &&
-                    !error
+                      values.queryString === searchString ||
+                      values.queryString === "") &&
+                    !isError
                   }
                 >
-                  Search
+                  {texts.app.searchButton}
                 </Button>
               </Form>
             );
           }}
         </Formik>
-        {isLoading && <div className="py-2">Loading...</div>}
-        {error && <div className="py-2">{error}</div>}
+        {isLoading && <Text>{texts.general.loading}</Text>}
+        {isError && <Text>{texts.general.error}</Text>}
         {!isLoading && users && users.length > 0 && (
-          <div className="py-2">{`Showing users for "${searchString}"`}</div>
+          <Text>{getShowingUsersText(searchString)}</Text>
         )}
         {users && (
           <div className="flex flex-col gap-2">

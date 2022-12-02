@@ -15,5 +15,5 @@ export interface User {
 }
 
 export interface UserFormValues {
-  q: string;
+  queryString: string;
 }

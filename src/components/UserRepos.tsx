@@ -1,39 +1,42 @@
 import { useState } from "react";
+import cn from "classnames";
+
 import { getRepos } from "../api/getRepos";
 import { Repos, User } from "../types";
-import cn from "classnames";
+import { texts } from "../texts";
 
 interface UserReposProps {
   user: User;
   repos: Repos;
-  setRepos: any;
+  setRepos: React.Dispatch<React.SetStateAction<Repos>>;
 }
 
 export const UserRepos = ({ user, repos, setRepos }: UserReposProps) => {
   const [showRepos, setShowRepos] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
-  const handleFetchRepos = async (login: string) => {
+  const handleFetchRepos = async () => {
     setShowRepos((prevState) => !prevState);
 
-    if (Array.isArray(repos[login])) {
+    if (Array.isArray(repos[user.login])) {
       return;
     }
 
     setIsLoading(true);
+    setIsError(false);
 
-    const fetchedRepos = await getRepos(login);
-
-    if (fetchedRepos === undefined) {
-      return;
-    }
-
-    //check if successfull
+    const fetchedRepos = await getRepos(user.login);
 
     setIsLoading(false);
 
-    setRepos((prevRepos: any) => {
-      return { ...prevRepos, [login]: fetchedRepos };
+    if (fetchedRepos === undefined) {
+      setIsError(true);
+      return;
+    }
+
+    setRepos((prevRepos: Repos) => {
+      return { ...prevRepos, [user.login]: fetchedRepos };
     });
   };
 
@@ -44,7 +47,7 @@ export const UserRepos = ({ user, repos, setRepos }: UserReposProps) => {
       <button
         key={user.login}
         className="bg-slate-100 hover:bg-slate-200 p-3 flex justify-between items-stretch"
-        onClick={() => handleFetchRepos(user.login)}
+        onClick={handleFetchRepos}
       >
         <div> {user.login}</div>
         <div className="flex items-center justify-center">
@@ -59,6 +62,11 @@ export const UserRepos = ({ user, repos, setRepos }: UserReposProps) => {
       </button>
       {showRepos && (
         <>
+          {isLoading && <>{texts.general.loading}</>}
+          {isError && <>{texts.general.error}</>}
+          {!isMoreThanOneRepo && !isLoading && !isError && (
+            <>{texts.userRepos.noRepos}</>
+          )}
           {isMoreThanOneRepo &&
             repos[user.login].map((repo) => (
               <div
@@ -75,10 +83,6 @@ export const UserRepos = ({ user, repos, setRepos }: UserReposProps) => {
                 <div>{repo.description}</div>
               </div>
             ))}
-          {!isMoreThanOneRepo && isLoading && "Loading..."}
-          {!isMoreThanOneRepo &&
-            !isLoading &&
-            "User does not have any public repo."}
         </>
       )}
     </>

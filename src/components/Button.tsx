@@ -1,6 +1,11 @@
 import cn from "classnames";
 
-export const Button = ({ disabled, children }: any) => {
+interface ButtonProps {
+  disabled: boolean;
+  children: React.ReactNode;
+}
+
+export const Button = ({ disabled, children }: ButtonProps) => {
   return (
     <button
       type="submit"
