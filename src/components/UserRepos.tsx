@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { getRepos } from "./api/getRepos";
-import { Repos, User } from "./types";
+import { getRepos } from "../api/getRepos";
+import { Repos, User } from "../types";
 import cn from "classnames";
 
 interface UserReposProps {

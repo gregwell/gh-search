@@ -16,7 +16,7 @@ export const getUsers = async (
 
     const res = await axios.get(`https://api.github.com/search/users`, config);
 
-    return res.data;
+    return res.data.items;
   } catch (error) {
     console.log(error);
   }
