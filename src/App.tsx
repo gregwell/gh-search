@@ -19,8 +19,8 @@ const App = () => {
     setIsError(false);
     setIsLoading(true);
 
-    setSearchString(values.queryString);
-    const fetchedUsers = await getUsers(values.queryString);
+    setSearchString(values.query);
+    const fetchedUsers = await getUsers(values.query);
 
     setIsLoading(false);
 
@@ -35,7 +35,7 @@ const App = () => {
   return (
     <div className="flex justify-center">
       <div className="sm:mt-10 p-4 w-full max-w-[800px]">
-        <Formik initialValues={{ queryString: "" }} onSubmit={handleSearch}>
+        <Formik initialValues={{ query: "" }} onSubmit={handleSearch}>
           {({ isSubmitting, values, handleChange }) => {
             return (
               <Form className="flex flex-col gap-4">
@@ -44,15 +44,15 @@ const App = () => {
                     handleChange(e);
                     setIsError(false);
                   }}
-                  name="queryString"
+                  name="query"
                   placeholder={texts.app.inputPlaceHolder}
                   className="w-full bg-slate-100 border border-slate-100 p-4"
                 />
                 <Button
                   disabled={
                     (isSubmitting ||
-                      values.queryString === searchString ||
-                      values.queryString === "") &&
+                      values.query === searchString ||
+                      values.query === "") &&
                     !isError
                   }
                 >
