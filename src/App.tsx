@@ -4,7 +4,7 @@ import { useState } from "react";
 import { getUsers } from "./api/getUsers";
 import { Button } from "./components/Button";
 import { UserFormValues, Repos, User } from "./types";
-import { UserRepos } from "./components/UserRepos";
+import { UserRepos } from "./components/UserRepos/UserRepos";
 import { getShowingUsersText, texts } from "./texts";
 import { Text } from "./components/Text";
 
@@ -72,7 +72,7 @@ const App = () => {
             {users.map((user) => (
               <UserRepos
                 key={user.id}
-                user={user}
+                userLogin={user.login}
                 repos={repos}
                 setRepos={setRepos}
               />

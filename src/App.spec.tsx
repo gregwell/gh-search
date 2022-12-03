@@ -4,12 +4,13 @@ import { getUsers } from "./api/getUsers";
 
 import App from "./App";
 import { mockUsers, mockUsersShortQuery } from "./App.mocks";
+import { texts } from "./texts";
 
 jest.mock("./api/getUsers");
 
 test("renders the input with placeholder and the search button", () => {
   render(<App />);
-  expect(screen.getByText("Search")).toBeInTheDocument();
+  expect(screen.getByText(texts.app.searchButton)).toBeInTheDocument();
   expect(screen.getByPlaceholderText("Enter username")).toBeInTheDocument();
 });
 
@@ -20,13 +21,13 @@ test("displays the list of users from the api", async () => {
 
   render(<App />);
 
-  expect(screen.getByText(/search/i)).toBeInTheDocument();
+  expect(screen.getByText(texts.app.searchButton)).toBeInTheDocument();
 
   const input = screen.getByPlaceholderText("Enter username");
 
   await user.click(input);
   await user.type(input, "greg");
-  await user.click(screen.getByText("Search"));
+  await user.click(screen.getByText(texts.app.searchButton));
 
   expect(getUsers).toHaveBeenCalledTimes(1);
 
@@ -42,13 +43,13 @@ test("displays other results if other query is entered", async () => {
 
   render(<App />);
 
-  expect(screen.getByText(/search/i)).toBeInTheDocument();
+  expect(screen.getByText(texts.app.searchButton)).toBeInTheDocument();
 
-  const input = screen.getByPlaceholderText("Enter username");
+  const input = screen.getByPlaceholderText(texts.app.inputPlaceHolder);
 
   await user.click(input);
   await user.type(input, "greg");
-  await user.click(screen.getByText("Search"));
+  await user.click(screen.getByText(texts.app.searchButton));
   expect(getUsers).toHaveBeenCalledTimes(1);
   mockUsers.forEach((mockUser) => {
     expect(screen.getByText(mockUser.login)).toBeInTheDocument();
@@ -57,7 +58,7 @@ test("displays other results if other query is entered", async () => {
   (getUsers as jest.Mock).mockReturnValueOnce(mockUsersShortQuery);
   await user.click(input);
   await user.type(input, "g");
-  await user.click(screen.getByText("Search"));
+  await user.click(screen.getByText(texts.app.searchButton));
   expect(getUsers).toHaveBeenCalledTimes(2);
   mockUsersShortQuery.forEach((mockUser) => {
     expect(screen.getByText(mockUser.login)).toBeInTheDocument();
@@ -71,18 +72,16 @@ test("displays an error text if there's no response from the api", async () => {
 
   render(<App />);
 
-  expect(screen.getByText(/search/i)).toBeInTheDocument();
+  expect(screen.getByText(texts.app.searchButton)).toBeInTheDocument();
 
-  const input = screen.getByPlaceholderText("Enter username");
+  const input = screen.getByPlaceholderText(texts.app.inputPlaceHolder);
 
   await user.click(input);
   await user.type(input, "greg");
-  await user.click(screen.getByText("Search"));
+  await user.click(screen.getByText(texts.app.searchButton));
 
   expect(getUsers).toHaveBeenCalledTimes(1);
-  expect(
-    screen.getByText("General error occured. Try again later.")
-  ).toBeInTheDocument();
+  expect(screen.getByText(texts.general.error)).toBeInTheDocument();
 });
 
 test("the submit button triggers a submit action if an error occurred during the last search", async () => {
@@ -92,20 +91,18 @@ test("the submit button triggers a submit action if an error occurred during the
 
   render(<App />);
 
-  expect(screen.getByText(/search/i)).toBeInTheDocument();
+  expect(screen.getByText(texts.app.searchButton)).toBeInTheDocument();
 
-  const input = screen.getByPlaceholderText("Enter username");
+  const input = screen.getByPlaceholderText(texts.app.inputPlaceHolder);
 
   await user.click(input);
   await user.type(input, "greg");
-  await user.click(screen.getByText("Search"));
+  await user.click(screen.getByText(texts.app.searchButton));
 
   expect(getUsers).toHaveBeenCalledTimes(1);
-  expect(
-    screen.getByText("General error occured. Try again later.")
-  ).toBeInTheDocument();
+  expect(screen.getByText(texts.general.error)).toBeInTheDocument();
 
-  await user.click(screen.getByText("Search"));
+  await user.click(screen.getByText(texts.app.searchButton));
   expect(getUsers).toHaveBeenCalledTimes(2);
 });
 
@@ -116,9 +113,9 @@ test("the submit button doesn't trigger a submit action if no text is entered", 
 
   render(<App />);
 
-  expect(screen.getByText(/search/i)).toBeInTheDocument();
+  expect(screen.getByText(texts.app.searchButton)).toBeInTheDocument();
 
-  await user.click(screen.getByText("Search"));
+  await user.click(screen.getByText(texts.app.searchButton));
 
   expect(getUsers).toHaveBeenCalledTimes(0);
 });
@@ -130,15 +127,15 @@ test("the submit button doesn't trigger a submit action if the text entered is e
 
   render(<App />);
 
-  expect(screen.getByText(/search/i)).toBeInTheDocument();
+  expect(screen.getByText(texts.app.searchButton)).toBeInTheDocument();
 
-  const input = screen.getByPlaceholderText("Enter username");
+  const input = screen.getByPlaceholderText(texts.app.inputPlaceHolder);
 
   await user.click(input);
   await user.type(input, "greg");
-  await user.click(screen.getByText("Search"));
+  await user.click(screen.getByText(texts.app.searchButton));
   expect(getUsers).toHaveBeenCalledTimes(1);
 
-  await user.click(screen.getByText("Search"));
+  await user.click(screen.getByText(texts.app.searchButton));
   expect(getUsers).toHaveBeenCalledTimes(1);
 });
