@@ -19,8 +19,6 @@ export const getUsers = async (
 
     const res = await axios.get(API_ROUTES.USERS, config);
 
-    console.log(res.data.items);
-
     return handleResponse(res.data.items);
   } catch (error) {
     return handleError(error as ApiError);
