@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { ApiResponse, User } from "../types";
+import { ApiError, ApiResponse, User } from "../types";
 import { apiConfig } from "./apiConfig";
 import { API_ROUTES } from "./apiRoutes";
 import { handleError, handleResponse } from "./apiUtils";
@@ -22,7 +22,7 @@ export const getUsers = async (
     console.log(res.data.items);
 
     return handleResponse(res.data.items);
-  } catch (error: any) {
-    return handleError(error);
+  } catch (error) {
+    return handleError(error as ApiError);
   }
 };

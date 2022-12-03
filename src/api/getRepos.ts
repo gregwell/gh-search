@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { ApiResponse, Repo } from "../types";
+import { ApiError, ApiResponse, Repo } from "../types";
 import { apiConfig } from "./apiConfig";
 import { API_ROUTES } from "./apiRoutes";
 import { handleError, handleResponse } from "./apiUtils";
@@ -12,7 +12,7 @@ export const getRepos = async (
     const res = await axios.get(API_ROUTES.REPOS(userName), apiConfig);
 
     return handleResponse(res.data);
-  } catch (error: any) {
-    return handleError(error);
+  } catch (error) {
+    return handleError(error as ApiError);
   }
 };
