@@ -10,8 +10,14 @@ export interface User {
   login: string;
 }
 
-export interface UserFormValues {
-  query: string;
+export interface UserResponse {
+  data: {
+    items: User[];
+  };
+}
+
+export interface ReposResponse {
+  data: Repo[];
 }
 
 export interface ApiResponse<T> {
@@ -22,4 +28,8 @@ export interface ApiResponse<T> {
 
 export interface ApiError {
   message: string;
+}
+
+export interface UserFormValues {
+  query: string;
 }
