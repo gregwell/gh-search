@@ -2,7 +2,7 @@
 
 An app that allows you to search for up to 5 GitHub users and browser their repositories.
 
-deployment: [http://gh-search-tawny.vercel.app](gh-search-tawny.vercel.app)
+deployment: [http://gh-search-tawny.vercel.app](http://gh-search-tawny.vercel.app)
 
 ---
 
