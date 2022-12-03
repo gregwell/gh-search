@@ -21,8 +21,6 @@ const App = () => {
     setSearchString(values.query);
     const fetchedUsers = await getUsers(values.query);
 
-    console.log(fetchedUsers);
-
     setIsLoading(false);
 
     if (!fetchedUsers.ok) {
