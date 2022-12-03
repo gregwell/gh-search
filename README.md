@@ -2,6 +2,8 @@
 
 An app that allows you to search for up to 5 GitHub users and browser their repositories.
 
+deployment: [gh-search-tawny.vercel.app](gh-search-tawny.vercel.app)
+
 ---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
