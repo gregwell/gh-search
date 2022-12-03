@@ -2,46 +2,40 @@ import { useState } from "react";
 import cn from "classnames";
 
 import { getRepos } from "../../api/getRepos";
-import { Repos } from "../../types";
-import { texts } from "../../texts";
+import { Repo } from "../../types";
+import { TEXTS } from "../../texts";
 
 interface UserReposProps {
   userLogin: string;
-  repos: Repos;
-  setRepos: React.Dispatch<React.SetStateAction<Repos>>;
 }
 
-export const UserRepos = ({ userLogin, repos, setRepos }: UserReposProps) => {
+export const UserRepos = ({ userLogin }: UserReposProps) => {
+  const [repos, setRepos] = useState([] as Repo[]);
   const [showRepos, setShowRepos] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState("");
 
   const handleFetchRepos = async () => {
     setShowRepos((prevState) => !prevState);
 
-    if (Array.isArray(repos[userLogin])) {
+    if (repos.length > 0) {
       return;
     }
 
     setIsLoading(true);
-    setIsError(false);
+    setError("");
 
     const fetchedRepos = await getRepos(userLogin);
 
     setIsLoading(false);
 
-    if (!fetchedRepos) {
-      setIsError(true);
+    if (!fetchedRepos.ok) {
+      setError(fetchedRepos.error);
       return;
     }
 
-    setRepos((prevRepos: Repos) => {
-      console.log({ ...prevRepos, [userLogin]: fetchedRepos });
-      return { ...prevRepos, [userLogin]: fetchedRepos };
-    });
+    setRepos(fetchedRepos.data);
   };
-
-  const isMoreThanOneRepo = repos[userLogin] && repos[userLogin].length > 0;
 
   return (
     <>
@@ -63,13 +57,13 @@ export const UserRepos = ({ userLogin, repos, setRepos }: UserReposProps) => {
       </button>
       {showRepos && (
         <>
-          {isLoading && <>{texts.general.loading}</>}
-          {isError && <>{texts.general.error}</>}
-          {!isMoreThanOneRepo && !isLoading && !isError && (
-            <>{texts.userRepos.noRepos}</>
+          {isLoading && <>{TEXTS.GENERAL.LOADING}</>}
+          {error && <>{TEXTS.GENERAL.ERROR}</>}
+          {repos.length < 1 && !isLoading && !error && (
+            <>{TEXTS.USER_REPOS.NO_REPOS}</>
           )}
-          {isMoreThanOneRepo &&
-            repos[userLogin].map((repo) => (
+          {repos.length > 0 &&
+            repos.map((repo) => (
               <div
                 key={repo.id}
                 className="flex py-3 px-2 ml-6 flex-col gap-1 bg-slate-300 min-h-[100px]"

@@ -1,10 +1,13 @@
 import axios from "axios";
-import { User } from "../types";
+
+import { ApiResponse, User } from "../types";
 import { apiConfig } from "./apiConfig";
+import { API_ROUTES } from "./apiRoutes";
+import { handleError, handleResponse } from "./apiUtils";
 
 export const getUsers = async (
   searchString: String
-): Promise<User[] | undefined> => {
+): Promise<ApiResponse<User[]>> => {
   try {
     const config = {
       ...apiConfig,
@@ -14,10 +17,12 @@ export const getUsers = async (
       },
     };
 
-    const res = await axios.get(`https://api.github.com/search/users`, config);
+    const res = await axios.get(API_ROUTES.USERS, config);
 
-    return res.data.items;
-  } catch (error) {
-    console.log(error);
+    console.log(res.data.items);
+
+    return handleResponse(res.data.items);
+  } catch (error: any) {
+    return handleError(error);
   }
 };

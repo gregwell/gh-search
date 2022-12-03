@@ -5,10 +5,6 @@ export interface Repo {
   stargazers_count: number;
 }
 
-export interface Repos {
-  [login: string]: Repo[];
-}
-
 export interface User {
   id: number;
   login: string;
@@ -16,4 +12,14 @@ export interface User {
 
 export interface UserFormValues {
   query: string;
+}
+
+export interface ApiResponse<T> {
+  ok: boolean;
+  data: T;
+  error: string;
+}
+
+export interface ApiError {
+  message: string;
 }

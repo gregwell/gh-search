@@ -1,17 +1,17 @@
-export const texts = {
-  general: {
-    error: "General error occured. Try again later.",
-    loading: "Loading...",
+export const TEXTS = {
+  GENERAL: {
+    ERROR: "General error occured. Try again later.",
+    NETWORK_ERROR: "Network error occured. Check your internet connection.",
+    LOADING: "Loading...",
   },
-  app: {
-    inputPlaceHolder: "Enter username",
-    searchButton: "Search",
+  APP: {
+    INPUT_PLACEHOLDER: "Enter username",
+    SEARCH: "Search",
+    SHOWING_USERS: (searchString: string) => {
+      return `Showing users for "${searchString}"`;
+    },
   },
-  userRepos: {
-    noRepos: "User does not have any public repo.",
+  USER_REPOS: {
+    NO_REPOS: "User does not have any public repo.",
   },
-};
-
-export const getShowingUsersText = (searchString: string): string => {
-  return `Showing users for "${searchString}"`;
 };

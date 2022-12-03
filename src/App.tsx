@@ -3,33 +3,34 @@ import { useState } from "react";
 
 import { getUsers } from "./api/getUsers";
 import { Button } from "./components/Button";
-import { UserFormValues, Repos, User } from "./types";
+import { UserFormValues, User } from "./types";
 import { UserRepos } from "./components/UserRepos/UserRepos";
-import { getShowingUsersText, texts } from "./texts";
+import { TEXTS } from "./texts";
 import { Text } from "./components/Text";
 
 const App = () => {
   const [users, setUsers] = useState([] as User[]);
-  const [repos, setRepos] = useState({} as Repos);
   const [searchString, setSearchString] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSearch = async (values: UserFormValues) => {
-    setIsError(false);
+    setError("");
     setIsLoading(true);
 
     setSearchString(values.query);
     const fetchedUsers = await getUsers(values.query);
 
+    console.log(fetchedUsers);
+
     setIsLoading(false);
 
-    if (!fetchedUsers) {
-      setIsError(true);
+    if (!fetchedUsers.ok) {
+      setError(fetchedUsers.error);
       setUsers([] as User[]);
       return;
     }
-    setUsers(fetchedUsers);
+    setUsers(fetchedUsers.data);
   };
 
   return (
@@ -42,10 +43,10 @@ const App = () => {
                 <Field
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     handleChange(e);
-                    setIsError(false);
+                    setError("");
                   }}
                   name="query"
-                  placeholder={texts.app.inputPlaceHolder}
+                  placeholder={TEXTS.APP.INPUT_PLACEHOLDER}
                   className="w-full bg-slate-100 border border-slate-100 p-4"
                 />
                 <Button
@@ -53,29 +54,24 @@ const App = () => {
                     (isSubmitting ||
                       values.query === searchString ||
                       values.query === "") &&
-                    !isError
+                    !error
                   }
                 >
-                  {texts.app.searchButton}
+                  {TEXTS.APP.SEARCH}
                 </Button>
               </Form>
             );
           }}
         </Formik>
-        {isLoading && <Text>{texts.general.loading}</Text>}
-        {isError && <Text>{texts.general.error}</Text>}
+        {isLoading && <Text>{TEXTS.GENERAL.LOADING}</Text>}
+        {error && <Text>{error}</Text>}
         {!isLoading && users && users.length > 0 && (
-          <Text>{getShowingUsersText(searchString)}</Text>
+          <Text>{TEXTS.APP.SHOWING_USERS(searchString)}</Text>
         )}
         {users && (
           <div className="flex flex-col gap-2">
             {users.map((user) => (
-              <UserRepos
-                key={user.id}
-                userLogin={user.login}
-                repos={repos}
-                setRepos={setRepos}
-              />
+              <UserRepos key={user.id} userLogin={user.login} />
             ))}
           </div>
         )}

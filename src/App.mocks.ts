@@ -1,3 +1,5 @@
+import { TEXTS } from "./texts";
+
 export const mockUsers = [
   {
     id: 1,
@@ -43,3 +45,21 @@ export const mockUsersShortQuery = [
     login: "ge",
   },
 ];
+
+export const mockUsersApiResponse = {
+  ok: true,
+  data: mockUsers,
+  error: "",
+};
+
+export const mockUsersShortQueryApiResponse = {
+  ok: true,
+  data: mockUsersShortQuery,
+  error: "",
+};
+
+export const errorApiResponse = {
+  ok: false,
+  data: [],
+  error: TEXTS.GENERAL.ERROR,
+};

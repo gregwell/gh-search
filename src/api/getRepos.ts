@@ -1,18 +1,18 @@
 import axios from "axios";
-import { Repo } from "../types";
+
+import { ApiResponse, Repo } from "../types";
 import { apiConfig } from "./apiConfig";
+import { API_ROUTES } from "./apiRoutes";
+import { handleError, handleResponse } from "./apiUtils";
 
 export const getRepos = async (
-  userName: String
-): Promise<Repo[] | undefined> => {
+  userName: string
+): Promise<ApiResponse<Repo[]>> => {
   try {
-    const res = await axios.get(
-      `https://api.github.com/users/${userName}/repos`,
-      apiConfig
-    );
+    const res = await axios.get(API_ROUTES.REPOS(userName), apiConfig);
 
-    return res.data;
-  } catch (error) {
-    console.log(error);
+    return handleResponse(res.data);
+  } catch (error: any) {
+    return handleError(error);
   }
 };
