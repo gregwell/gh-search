@@ -8,6 +8,15 @@ deployment: [http://gh-search-tawny.vercel.app](http://gh-search-tawny.vercel.ap
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+---
+
+## Environmental variables
+
+- should be put in the `.env` file in root directory and include the following:
+
+```REACT_APP_GITHUB_AUTH_TOKEN=<github auth token>```
+
+
 ## Available Scripts
 
 In the project directory, you can run:
